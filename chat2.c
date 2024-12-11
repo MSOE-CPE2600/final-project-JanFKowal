@@ -18,7 +18,7 @@ a secondary program to be run after Chat1.c to properly connect.
 
 // define some constants
 #define MAX 1024
-#define SERVER_IP "172.18.5.105" // Replace with the actual server IP
+#define SERVER_IP "172.17.76.112" // Replace with the actual server IP
 #define SERVER_PORT 1234
 
 char line[MAX];
@@ -34,18 +34,18 @@ void *read_from_server(void *arg) {
             close(sock);
             pthread_exit(NULL);
         }
-        printf("client read %s\n", ans);
+        printf("server> %s\n", ans);
+        printf("client> \n");
     }
 }
 
 void *write_to_server(void *arg) {
     while (1) {
-        printf("input a line\n");
+        printf("client> \n");
         bzero(line, MAX);
         fgets(line, MAX, stdin);
         line[strlen(line) - 1] = 0; // remove the \n
         int n = write(sock, line, MAX);
-        printf("client wrote %s\n", line);
         if (!strcmp(line, "quit")) {
             close(sock);
             pthread_exit(NULL);
