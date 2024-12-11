@@ -29,7 +29,7 @@ void *read_from_client(void *arg) {
             close(csock1);
             pthread_exit(NULL);
         }
-        printf("client> %s\n", line1);
+        printf("client: %s\n", line1);
         if (!strcmp(line1, "quit")) {
             close(csock1);
             pthread_exit(NULL);
@@ -41,9 +41,10 @@ void *read_from_client(void *arg) {
 void *write_to_client(void *arg) {
     while (1) {
         printf("server> \n");
+        bzero(line1, MAX);
         fgets(line1, MAX, stdin);
         line1[strlen(line1) - 1] = 0; // remove the \n
-        int n = sendto(csock1, line1, strlen(line1), 0, (struct sockaddr *)&client_addr1, sizeof(client_addr1));
+        sendto(csock1, line1, strlen(line1), 0, (struct sockaddr *)&client_addr1, sizeof(client_addr1));
         if (!strcmp(line1, "quit")) {
             close(csock1);
             pthread_exit(NULL);

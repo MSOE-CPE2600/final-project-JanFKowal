@@ -34,8 +34,9 @@ void *read_from_server(void *arg) {
             close(sock);
             pthread_exit(NULL);
         }
-        printf("server> %s\n", ans);
+        printf("server: %s\n", ans);
         printf("client> \n");
+        bzero(ans, MAX);
     }
 }
 
@@ -45,7 +46,7 @@ void *write_to_server(void *arg) {
         bzero(line, MAX);
         fgets(line, MAX, stdin);
         line[strlen(line) - 1] = 0; // remove the \n
-        int n = write(sock, line, MAX);
+        write(sock, line, MAX);
         if (!strcmp(line, "quit")) {
             close(sock);
             pthread_exit(NULL);
