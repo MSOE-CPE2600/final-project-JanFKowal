@@ -36,7 +36,7 @@ int main (void)
   while (1) {
     printf("server: accepting new connection ...\n");
     len1 = sizeof(client_addr1);
-    len2 = sizeof(client_addr2);
+    // len2 = sizeof(client_addr2);
     csock1 = accept(mysock, (struct sockaddr *)&client_addr1, &len1);
     if (csock1 < 0)
     {
@@ -44,13 +44,13 @@ int main (void)
     }
     printf("server accepted a client connection from \n");
     printf("Client: IP= %s port=%d \n", inet_ntoa(client_addr1.sin_addr), ntohs(client_addr1.sin_port));
-    csock2 = accept(mysock, (struct sockaddr *)&client_addr2, &len2);
-    if (csock2 < 0)
-    {
-      printf("server accept error \n");
-    }
-    printf("server accepted a client connection from \n");
-    printf("Client: IP= %s port=%d \n", inet_ntoa(client_addr2.sin_addr), ntohs(client_addr2.sin_port));
+    // csock2 = accept(mysock, (struct sockaddr *)&client_addr2, &len2);
+    // if (csock2 < 0)
+    // {
+    //   printf("server accept error \n");
+    // }
+    // printf("server accepted a client connection from \n");
+    // printf("Client: IP= %s port=%d \n", inet_ntoa(client_addr2.sin_addr), ntohs(client_addr2.sin_port));
  
   while(1) {
     n1 = recvfrom(csock1, line1, MAX, 0, NULL, NULL);
@@ -61,24 +61,26 @@ int main (void)
       break;
     }
     printf("server read %s\n", line1);
-    n1 = sendto(csock1, line1, MAX, 0, (struct sockaddr *)&client_addr1, sizeof(client_addr1));
+    n1 = sendto(csock2, line1, MAX, 0, (struct sockaddr *)&client_addr2, sizeof(client_addr2));
+    n1 = write(csock2, line1, MAX);
     printf("server wrote %s\n", line1);
     if (!strcmp(line1,"quit")) {
       return 0;
     }
-    n2 = recvfrom(csock2, line2, MAX, 0, NULL, NULL);
-    if (n2 == 0)
-    {
-      printf("server client died, server loops\n");
-      close(csock2);
-      break;
-    }
-    printf("server read %s\n", line2);
-    n2 = sendto(csock2, line2, MAX, 0, (struct sockaddr *)&client_addr2, sizeof(client_addr2));
-    printf("server wrote %s\n", line2);
-    if (!strcmp(line2,"quit")) { 
-      return 0;
-    }
+    // n2 = recvfrom(csock2, line2, MAX, 0, NULL, NULL);
+    // if (n2 == 0)
+    // {
+    //   printf("server client died, server loops\n");
+    //   close(csock2);
+    //   break;
+    // }
+    // printf("server read %s\n", line2);
+    // n2 = sendto(csock1, line2, MAX, 0, (struct sockaddr *)&client_addr1, sizeof(client_addr1));
+    // n2 = write(csock1, line2, MAX);
+    // printf("server wrote %s\n", line2);
+    // if (!strcmp(line2,"quit")) { 
+    //   return 0;
+    // }
   }
   }
   return 0;
